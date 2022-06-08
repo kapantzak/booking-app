@@ -1,4 +1,4 @@
-# Booking appliocation
+# Booking application
 
 A simple (web client) booking application for small businesses.
 
