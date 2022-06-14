@@ -1,5 +1,6 @@
 import Head from "next/head";
 import DefaultLayout from "@/layouts/DefaultLayout";
+import DateTimePicker from "@/components/DateTimePicker";
 
 export default function Home() {
   return (
@@ -12,7 +13,7 @@ export default function Home() {
         />
       </Head>
       <h1 className="text-3xl">Booking app</h1>
-      <p>Manage your bookings now!</p>
+      <DateTimePicker />
     </DefaultLayout>
   );
 }
