@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import Calendar from "@/components/Calendar";
+import { FaGlobeAmericas } from "react-icons/fa";
 
 const DateTimePicker = ({ date, locales, sundayFirst }) => {
   const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
@@ -12,8 +13,11 @@ const DateTimePicker = ({ date, locales, sundayFirst }) => {
   return (
     <div>
       <Calendar date={date} locales={locales} sundayFirst={sundayFirst} />
-      <div>
-        Time zone: {timeZone} ({time})
+      <div className="flex space-x-2 items-center">
+        <FaGlobeAmericas />
+        <div>
+          {timeZone} ({time})
+        </div>
       </div>
     </div>
   );

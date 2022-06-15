@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { useState, useEffect } from "react";
 import { getDaysOfWeek } from "@/lib/constants";
 import dateHelper, { getDateElements } from "@/lib/dateHelpers";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 const Calendar = ({ date, locales, sundayFirst }) => {
   const [currentDate, setCurrentDate] = useState(date);
@@ -30,20 +31,35 @@ const Calendar = ({ date, locales, sundayFirst }) => {
 
   return (
     <div>
-      <h2>{calendar.title}</h2>
-      <button type="button" onClick={() => handleNavigationButtonClick("prev")}>
-        Previous
-      </button>
-      <button type="button" onClick={() => handleNavigationButtonClick("next")}>
-        Next
-      </button>
-      <div className="grid grid-cols-7">
+      <div className="flex justify-between items-center">
+        <div>{calendar.title}</div>
+        <div className="flex space-x-4 items-center">
+          <button
+            type="button"
+            aria-label="Previous"
+            onClick={() => handleNavigationButtonClick("prev")}
+          >
+            <FaAngleLeft />
+          </button>
+          <button
+            type="button"
+            aria-label="Next"
+            onClick={() => handleNavigationButtonClick("next")}
+          >
+            <FaAngleRight />
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-7 items-center justify-items-center gap-2">
         {daysOfWeek.map((day) => (
-          <div key={day}>{day}</div>
+          <div className="px-4 py-2 rounded-md" key={day}>
+            {day}
+          </div>
         ))}
         {(calendar.calendar || []).map(
           ({ dayNumber, month, year, currentMonth, isNow }) => {
-            const dayCellStyle = classNames({
+            const dayCellStyle = classNames("px-4 py-2", "rounded-md", {
               "bg-cyan-600": isNow,
               "opacity-25": !currentMonth,
             });
