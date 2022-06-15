@@ -1,8 +1,14 @@
 import PropTypes from "prop-types";
+import dynamic from "next/dynamic";
+import { useState } from "react";
 import Calendar from "@/components/Calendar";
 import { FaGlobeAmericas } from "react-icons/fa";
 
+const DynamicTimePicker = dynamic(() => import("@/components/TimePicker"));
+
 const DateTimePicker = ({ date, locales, sundayFirst }) => {
+  const [state, setState] = useState({});
+
   const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
   const time = Intl.DateTimeFormat("el", {
     hour: "numeric",
@@ -10,9 +16,23 @@ const DateTimePicker = ({ date, locales, sundayFirst }) => {
     timeZone,
   }).format(new Date());
 
+  const dateSelectionHandler = (date) => {
+    setState((currentState) => ({ ...currentState, date }));
+  };
+
+  const timeSelectionHandler = (time) => {
+    setState((currentState) => ({ ...currentState, time }));
+  };
+
   return (
     <div>
-      <Calendar date={date} locales={locales} sundayFirst={sundayFirst} />
+      <Calendar
+        date={date}
+        locales={locales}
+        sundayFirst={sundayFirst}
+        onDateSelect={dateSelectionHandler}
+      />
+      {state.date && <DynamicTimePicker onTimeSelect={timeSelectionHandler} />}
       <div className="flex space-x-2 items-center">
         <FaGlobeAmericas />
         <div>

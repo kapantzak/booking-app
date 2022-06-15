@@ -5,9 +5,13 @@ import { getDaysOfWeek } from "@/lib/constants";
 import dateHelper, { getDateElements } from "@/lib/dateHelpers";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
-const Calendar = ({ date, locales, sundayFirst }) => {
+const navButtonStyle = "px-2 py-1";
+
+const Calendar = ({ date, locales, sundayFirst, onDateSelect }) => {
   const [currentDate, setCurrentDate] = useState(date);
   const [calendar, setCalendar] = useState([]);
+
+  const localDateFormatter = new Intl.DateTimeFormat(locales);
 
   useEffect(() => {
     const helper = dateHelper({ date, locales, sundayFirst });
@@ -35,6 +39,7 @@ const Calendar = ({ date, locales, sundayFirst }) => {
         <div>{calendar.title}</div>
         <div className="flex space-x-4 items-center">
           <button
+            className={navButtonStyle}
             type="button"
             aria-label="Previous"
             onClick={() => handleNavigationButtonClick("prev")}
@@ -42,6 +47,7 @@ const Calendar = ({ date, locales, sundayFirst }) => {
             <FaAngleLeft />
           </button>
           <button
+            className={navButtonStyle}
             type="button"
             aria-label="Next"
             onClick={() => handleNavigationButtonClick("next")}
@@ -59,17 +65,27 @@ const Calendar = ({ date, locales, sundayFirst }) => {
         ))}
         {(calendar.calendar || []).map(
           ({ dayNumber, month, year, currentMonth, isNow }) => {
-            const dayCellStyle = classNames("px-4 py-2", "rounded-md", {
-              "bg-cyan-600": isNow,
-              "opacity-25": !currentMonth,
-            });
+            const thisDate = new Date(year, month, dayNumber);
+
+            const dayButtonStyle = classNames(
+              "w-[50px] h-[50px] rounded-full hover:bg-cyan-200",
+              {
+                "bg-cyan-100": isNow,
+              }
+            );
 
             return (
-              <div
-                className={dayCellStyle}
-                key={`${year}-${month}-${dayNumber}`}
-              >
-                {dayNumber}
+              <div key={`${year}-${month}-${dayNumber}`}>
+                {(currentMonth && (
+                  <button
+                    className={dayButtonStyle}
+                    type="button"
+                    aria-label={localDateFormatter.format(thisDate)}
+                    onClick={() => onDateSelect(thisDate)}
+                  >
+                    {dayNumber}
+                  </button>
+                )) || <span>&nbsp;</span>}
               </div>
             );
           }
@@ -83,12 +99,14 @@ Calendar.defaultProps = {
   date: new Date(),
   locales: "el",
   sundayFirst: false,
+  onDateSelect: () => {},
 };
 
 Calendar.propTypes = {
   date: PropTypes.instanceOf(Date),
   locales: PropTypes.string,
   sundayFirst: PropTypes.bool,
+  onDateSelect: PropTypes.func,
 };
 
 export default Calendar;
