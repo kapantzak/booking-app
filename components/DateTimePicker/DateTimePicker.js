@@ -2,43 +2,62 @@ import PropTypes from "prop-types";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import Calendar from "@/components/Calendar";
-import { FaGlobeAmericas } from "react-icons/fa";
+import TimeZone from "@/components/TimeZone";
+import { FaArrowLeft } from "react-icons/fa";
 
 const DynamicTimePicker = dynamic(() => import("@/components/TimePicker"));
 
-const DateTimePicker = ({ date, locales, sundayFirst }) => {
+const DateTimePicker = ({ date, locales, sundayFirst, onDateTimeSelect }) => {
+  const [calendarDate, setCalendarDate] = useState(date);
   const [state, setState] = useState({});
 
-  const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
-  const time = Intl.DateTimeFormat("el", {
-    hour: "numeric",
-    minute: "numeric",
-    timeZone,
-  }).format(new Date());
+  const localDateFormatter = new Intl.DateTimeFormat(locales, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
   const dateSelectionHandler = (date) => {
     setState((currentState) => ({ ...currentState, date }));
   };
 
   const timeSelectionHandler = (time) => {
-    setState((currentState) => ({ ...currentState, time }));
+    const newState = { ...state, time };
+    setState(newState);
+    onDateTimeSelect(newState);
+  };
+
+  const backButtonClickHandler = () => {
+    setCalendarDate(state.date);
+    setState({});
   };
 
   return (
     <div>
-      <Calendar
-        date={date}
-        locales={locales}
-        sundayFirst={sundayFirst}
-        onDateSelect={dateSelectionHandler}
-      />
-      {state.date && <DynamicTimePicker onTimeSelect={timeSelectionHandler} />}
-      <div className="flex space-x-2 items-center">
-        <FaGlobeAmericas />
+      {(state.date && (
         <div>
-          {timeZone} ({time})
+          <button
+            type="button"
+            aria-label="Back to date selection"
+            onClick={backButtonClickHandler}
+          >
+            <FaArrowLeft />
+          </button>
+          <div>{localDateFormatter.format(state.date)}</div>
+          <TimeZone />
+          <DynamicTimePicker onTimeSelect={timeSelectionHandler} />
         </div>
-      </div>
+      )) || (
+        <>
+          <Calendar
+            date={calendarDate}
+            locales={locales}
+            sundayFirst={sundayFirst}
+            onDateSelect={dateSelectionHandler}
+          />
+          <TimeZone />
+        </>
+      )}
     </div>
   );
 };
@@ -47,12 +66,14 @@ DateTimePicker.defaultProps = {
   date: new Date(),
   locales: "el",
   sundayFirst: false,
+  onDateTimeSelect: () => {},
 };
 
 DateTimePicker.propTypes = {
   date: PropTypes.instanceOf(Date),
   locales: PropTypes.string,
   sundayFirst: PropTypes.bool,
+  onDateTimeSelect: PropTypes.func,
 };
 
 export default DateTimePicker;

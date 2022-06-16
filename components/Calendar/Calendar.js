@@ -4,14 +4,11 @@ import { useState, useEffect } from "react";
 import { getDaysOfWeek } from "@/lib/constants";
 import dateHelper, { getDateElements } from "@/lib/dateHelpers";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-
-const navButtonStyle = "px-2 py-1";
+import DaysList from "./DaysList";
 
 const Calendar = ({ date, locales, sundayFirst, onDateSelect }) => {
   const [currentDate, setCurrentDate] = useState(date);
   const [calendar, setCalendar] = useState([]);
-
-  const localDateFormatter = new Intl.DateTimeFormat(locales);
 
   useEffect(() => {
     const helper = dateHelper({ date, locales, sundayFirst });
@@ -33,21 +30,27 @@ const Calendar = ({ date, locales, sundayFirst, onDateSelect }) => {
 
   const daysOfWeek = getDaysOfWeek({ locales, sundayFirst });
 
+  const prevButtonDisabled = calendar.inCurrentMonth;
+  const prevNavButtonStyle = classNames("px-2 py-1", {
+    "opacity-25": prevButtonDisabled,
+  });
+
   return (
     <div>
       <div className="flex justify-between items-center">
         <div>{calendar.title}</div>
         <div className="flex space-x-4 items-center">
           <button
-            className={navButtonStyle}
+            className={prevNavButtonStyle}
             type="button"
             aria-label="Previous"
             onClick={() => handleNavigationButtonClick("prev")}
+            disabled={prevButtonDisabled}
           >
             <FaAngleLeft />
           </button>
           <button
-            className={navButtonStyle}
+            className="px-2 py-1"
             type="button"
             aria-label="Next"
             onClick={() => handleNavigationButtonClick("next")}
@@ -63,33 +66,11 @@ const Calendar = ({ date, locales, sundayFirst, onDateSelect }) => {
             {day}
           </div>
         ))}
-        {(calendar.calendar || []).map(
-          ({ dayNumber, month, year, currentMonth, isNow }) => {
-            const thisDate = new Date(year, month, dayNumber);
-
-            const dayButtonStyle = classNames(
-              "w-[50px] h-[50px] rounded-full hover:bg-cyan-200",
-              {
-                "bg-cyan-100": isNow,
-              }
-            );
-
-            return (
-              <div key={`${year}-${month}-${dayNumber}`}>
-                {(currentMonth && (
-                  <button
-                    className={dayButtonStyle}
-                    type="button"
-                    aria-label={localDateFormatter.format(thisDate)}
-                    onClick={() => onDateSelect(thisDate)}
-                  >
-                    {dayNumber}
-                  </button>
-                )) || <span>&nbsp;</span>}
-              </div>
-            );
-          }
-        )}
+        <DaysList
+          locales={locales}
+          calendar={calendar.calendar}
+          onDateSelect={onDateSelect}
+        />
       </div>
     </div>
   );
