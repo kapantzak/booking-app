@@ -1,10 +1,8 @@
 import Head from "next/head";
+import Link from "next/link";
 import DefaultLayout from "@/layouts/DefaultLayout";
-import DateTimePicker from "@/components/DateTimePicker";
 
 export default function Home() {
-  const dateTimeSelectionHandler = (dateTime) => console.log(dateTime);
-
   return (
     <DefaultLayout>
       <Head>
@@ -15,7 +13,9 @@ export default function Home() {
         />
       </Head>
       <h1 className="text-3xl">Booking app</h1>
-      <DateTimePicker onDateTimeSelect={dateTimeSelectionHandler} />
+      <Link href="/services">
+        <a>Services</a>
+      </Link>
     </DefaultLayout>
   );
 }
