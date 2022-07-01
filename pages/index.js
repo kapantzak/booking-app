@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Link from "next/link";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import { PROJECT_NAME } from "@/lib/constants";
 
@@ -14,9 +13,6 @@ export default function Home() {
         />
       </Head>
       <h1 className="text-3xl">Booking app</h1>
-      <Link href="/services">
-        <a>Services</a>
-      </Link>
     </DefaultLayout>
   );
 }
