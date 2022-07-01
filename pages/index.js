@@ -1,12 +1,13 @@
 import Head from "next/head";
 import Link from "next/link";
 import DefaultLayout from "@/layouts/DefaultLayout";
+import { PROJECT_NAME } from "@/lib/constants";
 
 export default function Home() {
   return (
     <DefaultLayout>
       <Head>
-        <title>PickMyTime | Home</title>
+        <title>{PROJECT_NAME.condensed} | Home</title>
         <meta
           name="description"
           content="A simple booking application for small businesses"

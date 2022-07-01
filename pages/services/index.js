@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { PROJECT_NAME } from "@/lib/constants";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import Services from "@/components/Services";
 
@@ -11,7 +12,7 @@ export default function ServicesPage() {
   return (
     <DefaultLayout>
       <Head>
-        <title>PickMyTime | Services</title>
+        <title>{PROJECT_NAME.condensed} | Services</title>
         <meta
           name="description"
           content="A simple booking application for small businesses"

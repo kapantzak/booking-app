@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { PROJECT_NAME } from "@/lib/constants";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import DefaultLayout from "@/layouts/DefaultLayout";
@@ -20,7 +21,7 @@ export default function Calendar() {
   return (
     <DefaultLayout>
       <Head>
-        <title>PickMyTime | Calendar</title>
+        <title>{PROJECT_NAME.condensed} | Calendar</title>
         <meta
           name="description"
           content="A simple booking application for small businesses"
