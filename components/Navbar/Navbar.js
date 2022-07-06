@@ -5,15 +5,15 @@ const NavBar = () => {
     <nav className="flex">
       {[
         {
-          label: "Service",
-          path: "/services",
+          label: "Flow",
+          path: "/flow",
         },
         {
           label: "Login",
           path: "/user/login",
         },
       ].map((navItem) => (
-        <NavLink {...navItem} />
+        <NavLink key={navItem.path} {...navItem} />
       ))}
     </nav>
   );

@@ -1,14 +1,15 @@
 import PropTypes from "prop-types";
-import { useRouter } from "next/router";
 import Service from "./Service";
 
-const Services = ({ services }) => {
-  const router = useRouter();
+const Services = ({ onServiceSelect }) => {
+  // HARDCODED: Use a hook to get the services from the selected shop
+  const services = [
+    { id: 1, name: "Mens haircut" },
+    { id: 2, name: "Womens haircut" },
+  ];
+
   const serviceClickHandler = (id) => {
-    router.push({
-      pathname: "/calendar",
-      query: { service: id },
-    });
+    onServiceSelect(id);
   };
 
   return (
@@ -26,11 +27,11 @@ const Services = ({ services }) => {
 };
 
 Services.defaultProps = {
-  services: [],
+  onServiceSelect: () => {},
 };
 
 Services.propTypes = {
-  services: PropTypes.array,
+  onServiceSelect: PropTypes.func,
 };
 
 export default Services;
