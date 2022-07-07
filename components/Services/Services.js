@@ -8,8 +8,8 @@ const Services = ({ onServiceSelect }) => {
     { id: 2, name: "Womens haircut" },
   ];
 
-  const serviceClickHandler = (id) => {
-    onServiceSelect(id);
+  const serviceClickHandler = (service) => {
+    onServiceSelect(service);
   };
 
   return (

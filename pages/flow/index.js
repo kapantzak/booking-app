@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { PROJECT_NAME } from "@/lib/constants";
 import DefaultLayout from "@/layouts/DefaultLayout";
+import Flow from "@/flows/Flow";
 import HairSalon from "@/flows/HairSalon";
 
 export default function FlowPage() {
@@ -15,7 +16,7 @@ export default function FlowPage() {
           content="A simple booking application for small businesses"
         />
       </Head>
-      <HairSalon onComplete={handleComplete} />
+      <Flow />
     </DefaultLayout>
   );
 }

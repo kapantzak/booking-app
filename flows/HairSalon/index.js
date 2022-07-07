@@ -1,35 +1,63 @@
 import PropTypes from "prop-types";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const DynamicServices = dynamic(() => import("@/components/Services"));
-const DynamicDateTimePicker = dynamic(() =>
-  import("@/components/DateTimePicker")
-);
+const DynamicCalendar = dynamic(() => import("@/components/Calendar"));
+const DynamicTimePicker = dynamic(() => import("@/components/TimePicker"));
+const DynamicTimeZone = dynamic(() => import("@/components/TimeZone"));
 
-const HairSalon = ({ onStepChange, onComplete }) => {
-  const [step, setStep] = useState(1);
-  const [service, setService] = useState(null);
-  const [dateTime, setDateTime] = useState(null);
+const initialState = {
+  service: null,
+  date: null,
+  time: null,
+};
 
-  const handleServiceSelection = (serviceId) => {
-    setService(serviceId);
-    setStep(2);
+const HairSalon = ({ step, onStepChange, onComplete }) => {
+  const [state, setState] = useState(initialState);
+
+  useEffect(() => {
+    let newState = state;
+
+    switch (step) {
+      case 1:
+        newState = { ...state, date: null, time: null };
+        break;
+      case 2:
+        newState = { ...state, time: null };
+        break;
+    }
+
+    setState(newState);
+    onStepChange({ step, state: newState });
+  }, [step]);
+
+  const handleServiceSelection = (service) => {
+    const newState = { ...state, service };
+    setState(newState);
     onStepChange({
-      step,
-      state: {
-        service,
-        dateTime,
-      },
+      step: step + 1,
+      state: newState,
     });
   };
 
-  const handleDateTimeSelection = (dateTime) => {
-    setDateTime(dateTime);
-    onComplete({
-      service,
-      dateTime,
+  const handleDateSelection = (date) => {
+    const newState = { ...state, date };
+    setState(newState);
+    onStepChange({
+      step: step + 1,
+      state: newState,
     });
+  };
+
+  const handleTimeSelection = (time) => {
+    const newState = { ...state, time };
+    setState(newState);
+    onStepChange({
+      step,
+      state: newState,
+    });
+    onComplete(newState);
   };
 
   switch (step) {
@@ -37,7 +65,20 @@ const HairSalon = ({ onStepChange, onComplete }) => {
       return <DynamicServices onServiceSelect={handleServiceSelection} />;
     case 2:
       return (
-        <DynamicDateTimePicker onDateTimeSelect={handleDateTimeSelection} />
+        <>
+          <DynamicCalendar
+            date={state.date || new Date()}
+            onDateSelect={handleDateSelection}
+          />
+          <DynamicTimeZone />
+        </>
+      );
+    case 3:
+      return (
+        <>
+          <DynamicTimeZone />
+          <DynamicTimePicker onTimeSelect={handleTimeSelection} />
+        </>
       );
     default:
       return <div>Not found</div>;
@@ -45,11 +86,13 @@ const HairSalon = ({ onStepChange, onComplete }) => {
 };
 
 HairSalon.defaultProps = {
+  step: 1,
   onStepChange: () => {},
   onComplete: () => {},
 };
 
 HairSalon.propTypes = {
+  step: PropTypes.number,
   onStepChange: PropTypes.func,
   onComplete: PropTypes.func,
 };

@@ -69,6 +69,7 @@ const Calendar = ({ date, locales, sundayFirst, onDateSelect }) => {
         <DaysList
           locales={locales}
           calendar={calendar.calendar}
+          selectedDate={date}
           onDateSelect={onDateSelect}
         />
       </div>

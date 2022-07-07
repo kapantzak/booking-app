@@ -6,7 +6,7 @@ const Service = ({ id, name, clickHandler }) => {
       className="text-center py-2 md:w-1/2 lg:w-1/4 border border-solid border-cyan-600 rounded"
       role="button"
       aria-label={`Service - ${name}`}
-      onClick={() => clickHandler(id)}
+      onClick={() => clickHandler({ id, name })}
     >
       {name}
     </div>

@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import classNames from "classnames";
+import { datesEqual } from "@/lib/dateHelpers";
 
-const DaysList = ({ locales, calendar, onDateSelect }) => {
+const DaysList = ({ locales, calendar, selectedDate, onDateSelect }) => {
   const localDateFormatter = new Intl.DateTimeFormat(locales);
 
   return (
@@ -14,6 +15,7 @@ const DaysList = ({ locales, calendar, onDateSelect }) => {
             "w-[50px] h-[50px] rounded-full hover:bg-cyan-200",
             {
               "bg-cyan-100": isNow,
+              "bg-cyan-500": datesEqual(selectedDate, thisDate),
               "opacity-25": inPast,
               "hover:bg-inherit": inPast,
               "focus:bg-inherit": inPast,
@@ -45,12 +47,14 @@ const DaysList = ({ locales, calendar, onDateSelect }) => {
 DaysList.defaultProps = {
   locales: "el",
   calendar: [],
+  selectedDate: null,
   onDateSelect: () => {},
 };
 
 DaysList.propTypes = {
   locales: PropTypes.string,
   calendar: PropTypes.array,
+  selectedDate: PropTypes.instanceOf(Date),
   onDateSelect: PropTypes.func,
 };
 
