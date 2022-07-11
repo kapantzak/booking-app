@@ -5,7 +5,7 @@ const SignInWithGoogleButton = () => {
     <>
       <div id="g_id_onload" data-client_id={GOOGLE_CLIENT_ID}></div>
       <div
-        class="g_id_signin"
+        className="g_id_signin"
         data-type="standard"
         data-size="large"
         data-theme="outline"

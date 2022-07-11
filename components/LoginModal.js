@@ -19,7 +19,7 @@ const LoginModal = () => {
     if (modalVisible) {
       initializeGoogleButton();
     }
-  }, [modalVisible]);
+  }, [modalVisible, initializeGoogleButton]);
 
   return (
     <>

@@ -13,7 +13,7 @@ const Calendar = ({ date, locales, sundayFirst, onDateSelect }) => {
   useEffect(() => {
     const helper = dateHelper({ date, locales, sundayFirst });
     setCalendar(helper.getCalendar(currentDate));
-  }, [currentDate]);
+  }, [currentDate, date, locales, sundayFirst]);
 
   const handleNavigationButtonClick = (direction) => {
     const { month, year } = getDateElements(currentDate);
