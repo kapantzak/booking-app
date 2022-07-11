@@ -1,10 +1,21 @@
 import { useEffect, useState } from "react";
-import AuthLayout from "@/layouts/AuthLayout";
 import axios from "axios";
 import { GOOGLE_CLIENT_ID } from "@/lib/constants";
 
-const Login = () => {
+const useAuth = () => {
   const [userCredentials, setUserCredentials] = useState({});
+
+  const initializeGoogleButton = () => {
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleCredentialResponse,
+    });
+    google.accounts.id.renderButton(document.getElementById("buttonDiv"), {
+      theme: "outline",
+      size: "large",
+    });
+    google.accounts.id.prompt();
+  };
 
   const handleGoogleCredentialResponse = async ({ credential }) => {
     axios
@@ -32,39 +43,24 @@ const Login = () => {
     setUserCredentials((userCredentials) => ({ ...userCredentials, password }));
   };
 
-  useEffect(() => {
-    google.accounts.id.initialize({
-      client_id: GOOGLE_CLIENT_ID,
-      callback: handleGoogleCredentialResponse,
-    });
-    google.accounts.id.renderButton(document.getElementById("buttonDiv"), {
-      theme: "outline",
-      size: "large",
-    });
-    google.accounts.id.prompt();
-  }, []);
+  //   useEffect(() => {
+  //     google.accounts.id.initialize({
+  //       client_id: GOOGLE_CLIENT_ID,
+  //       callback: handleGoogleCredentialResponse,
+  //     });
+  //     google.accounts.id.renderButton(document.getElementById("buttonDiv"), {
+  //       theme: "outline",
+  //       size: "large",
+  //     });
+  //     google.accounts.id.prompt();
+  //   }, []);
 
-  return (
-    <AuthLayout>
-      <div id="buttonDiv"></div>
-
-      <form onSubmit={handleCustomCredentials}>
-        <label>
-          Email
-          <input name="email" type="text" onChange={handleEmailChange} />
-        </label>
-        <label>
-          Password
-          <input
-            name="password"
-            type="password"
-            onChange={handlePasswordChange}
-          />
-        </label>
-        <button>Login</button>
-      </form>
-    </AuthLayout>
-  );
+  return {
+    initializeGoogleButton,
+    handleCustomCredentials,
+    handleEmailChange,
+    handlePasswordChange,
+  };
 };
 
-export default Login;
+export default useAuth;
