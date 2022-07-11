@@ -1,5 +1,5 @@
 import Link from "next/link";
-import NavBar from "../Navbar";
+import NavBar from "@/components/NavBar";
 
 const Header = () => {
   return (
