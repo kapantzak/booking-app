@@ -54,10 +54,13 @@ const HairSalon = ({ step, onStepChange, onComplete }) => {
     const newState = { ...state, time };
     setState(newState);
     onStepChange({
-      step,
+      step: step + 1,
       state: newState,
     });
-    onComplete(newState);
+  };
+
+  const handleConfirmation = () => {
+    onComplete(state);
   };
 
   switch (step) {
@@ -78,6 +81,15 @@ const HairSalon = ({ step, onStepChange, onComplete }) => {
         <>
           <DynamicTimeZone />
           <DynamicTimePicker onTimeSelect={handleTimeSelection} />
+        </>
+      );
+    case 4:
+      return (
+        <>
+          <div>Comfirm state: {JSON.stringify(state)}</div>
+          <button type="button" onClick={handleConfirmation}>
+            Confirm
+          </button>
         </>
       );
     default:
