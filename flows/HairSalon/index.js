@@ -1,15 +1,18 @@
 import PropTypes from "prop-types";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
+import TextField from "@mui/material/TextField";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 
 const DynamicServices = dynamic(() => import("@/components/Services"));
-const DynamicCalendar = dynamic(() => import("@/components/Calendar"));
 const DynamicTimePicker = dynamic(() => import("@/components/TimePicker"));
 const DynamicTimeZone = dynamic(() => import("@/components/TimeZone"));
 
 const initialState = {
   service: null,
-  date: null,
+  date: new Date(),
   time: null,
 };
 
@@ -69,10 +72,17 @@ const HairSalon = ({ step, onStepChange, onComplete }) => {
     case 2:
       return (
         <>
-          <DynamicCalendar
-            date={state.date || new Date()}
-            onDateSelect={handleDateSelection}
-          />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <StaticDatePicker
+              displayStaticWrapperAs="desktop"
+              openTo="year"
+              value={state.date}
+              onChange={(newValue) => {
+                handleDateSelection(newValue);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
           <DynamicTimeZone />
         </>
       );
