@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import elLocale from "date-fns/locale/el";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 
@@ -72,7 +73,10 @@ const HairSalon = ({ step, onStepChange, onComplete }) => {
     case 2:
       return (
         <>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <LocalizationProvider
+            dateAdapter={AdapterDateFns}
+            adapterLocale={elLocale}
+          >
             <StaticDatePicker
               displayStaticWrapperAs="desktop"
               openTo="year"
