@@ -79,7 +79,8 @@ const HairSalon = ({ step, onStepChange, onComplete }) => {
           >
             <StaticDatePicker
               displayStaticWrapperAs="desktop"
-              openTo="year"
+              openTo="day"
+              disablePast={true}
               value={state.date}
               onChange={(newValue) => {
                 handleDateSelection(newValue);
