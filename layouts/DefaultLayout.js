@@ -1,12 +1,15 @@
+import { Container } from "@mui/material";
 import BaseLayout from "@/layouts/BaseLayout";
-import Header from "@/components/Header";
+import AppHeader from "@/components/AppHeader";
 import Footer from "@/components/Footer";
 
 const DefaultLayout = ({ children }) => {
   return (
     <BaseLayout>
-      <Header />
-      <main>{children}</main>
+      <AppHeader />
+      <main>
+        <Container fixed>{children}</Container>
+      </main>
       <Footer />
     </BaseLayout>
   );
