@@ -1,23 +1,14 @@
 import PropTypes from "prop-types";
-import { Fragment } from "react";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-} from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { ArrowBack, Check } from "@mui/icons-material";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import elLocale from "date-fns/locale/el";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import { getDateElements } from "@/lib/dateHelpers";
+import SelectedServices from "./SelectedServices";
+import SelectedDateTime from "./SelectedDateTime";
 
 const DynamicServices = dynamic(() => import("@/components/Services"));
 const DynamicTimePicker = dynamic(() => import("@/components/TimePicker"));
@@ -50,50 +41,6 @@ const initialState = {
   services: [],
   date: new Date(),
   time: null,
-};
-
-const SelectedServices = ({ services }) => {
-  if (!services) return null;
-
-  const totalDuration = services.reduce((total, { durationInMinutes }) => {
-    total += durationInMinutes;
-
-    return total;
-  }, 0);
-
-  return (
-    <>
-      <Typography>You have selected {services.length} services:</Typography>
-      <List>
-        {services.map(({ name, durationInMinutes }, index) => (
-          <Fragment key={name}>
-            <ListItem>
-              <ListItemText
-                primary={name}
-                secondary={`Duration: ${durationInMinutes} min`}
-              />
-            </ListItem>
-            {index < services.length - 1 && <Divider light />}
-          </Fragment>
-        ))}
-      </List>
-      {services.length > 1 && (
-        <Typography>with total duration of {totalDuration} minutes</Typography>
-      )}
-    </>
-  );
-};
-
-const SelectedDateTime = ({ date, time }) => {
-  const { year, month, dayNumber } = getDateElements(date);
-  const dateTime = new Date(year, month, dayNumber, time[0], time[1], 0);
-
-  const localDate = Intl.DateTimeFormat("el", {
-    dateStyle: "full",
-    timeStyle: "long",
-  }).format(dateTime);
-
-  return <Typography>{localDate}</Typography>;
 };
 
 const HairSalon = ({ step, onStepChange, onComplete, onPopulateStepsList }) => {
