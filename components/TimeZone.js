@@ -1,4 +1,4 @@
-import { FaGlobeAmericas } from "react-icons/fa";
+import { Public } from "@mui/icons-material";
 
 const TimeZone = () => {
   const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
@@ -10,7 +10,7 @@ const TimeZone = () => {
 
   return (
     <div className="flex space-x-2 items-center">
-      <FaGlobeAmericas />
+      <Public />
       <div>
         {timeZone} ({time})
       </div>

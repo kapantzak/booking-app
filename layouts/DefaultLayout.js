@@ -8,7 +8,9 @@ const DefaultLayout = ({ children }) => {
     <BaseLayout>
       <AppHeader />
       <main>
-        <Container fixed>{children}</Container>
+        <Container fixed sx={{ marginTop: 4 }}>
+          {children}
+        </Container>
       </main>
       <Footer />
     </BaseLayout>

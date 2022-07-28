@@ -1,21 +1,25 @@
 import { useState } from "react";
-import { FaArrowLeft } from "react-icons/fa";
-import FlowStepper from "@/components/FlowStepper";
-import HairSalon from "./HairSalon";
+import { Grid } from "@mui/material";
+import {
+  FlowStepperVertical,
+  FlowStepperHorizontal,
+} from "@/components/FlowStepper";
+import HairSalon from "@/flows/HairSalon";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Flow = () => {
+  const [steps, setSteps] = useState([]);
   const [step, setStep] = useState(1);
   const [state, setState] = useState({});
+  const largeViewPort = useMediaQuery("(min-width:900px)");
+
+  const handleStepsListPopulation = (stepsList) => {
+    setSteps(stepsList);
+  };
 
   const handleStepChange = ({ step, state }) => {
     setStep(step);
     setState(state);
-  };
-
-  const handleBackButton = () => {
-    if (step > 1) {
-      setStep(step - 1);
-    }
   };
 
   const handleComplete = (state) => {
@@ -24,27 +28,21 @@ const Flow = () => {
   };
 
   return (
-    <div>
-      <FlowStepper
-        steps={[
-          { index: 1, label: "Select service" },
-          { index: 2, label: "Select date" },
-          { index: 3, label: "Select time" },
-          { index: 4, label: "Confirm" },
-        ]}
-        activeStep={step - 1}
-      />
-      {step > 1 && (
-        <button type="button" aria-label="Back" onClick={handleBackButton}>
-          <FaArrowLeft />
-        </button>
-      )}
-      <HairSalon
-        step={step}
-        onStepChange={handleStepChange}
-        onComplete={handleComplete}
-      />
-    </div>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={3}>
+        {(largeViewPort && (
+          <FlowStepperVertical steps={steps} activeStep={step - 1} />
+        )) || <FlowStepperHorizontal steps={steps} activeStep={step - 1} />}
+      </Grid>
+      <Grid item xs={12} md={9}>
+        <HairSalon
+          step={step}
+          onStepChange={handleStepChange}
+          onComplete={handleComplete}
+          onPopulateStepsList={handleStepsListPopulation}
+        />
+      </Grid>
+    </Grid>
   );
 };
 

@@ -2,7 +2,6 @@ import Head from "next/head";
 import { PROJECT_NAME } from "@/lib/constants";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import Flow from "@/flows/Flow";
-import HairSalon from "@/flows/HairSalon";
 
 export default function FlowPage() {
   const handleComplete = (state) => console.log(state);

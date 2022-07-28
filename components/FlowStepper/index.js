@@ -1,3 +1,4 @@
-import FlowStepper from "./FlowStepper";
+import FlowStepperVertical from "./FlowStepperVertical";
+import FlowStepperHorizontal from "./FlowStepperHorizontal";
 
-export default FlowStepper;
+export { FlowStepperVertical, FlowStepperHorizontal };

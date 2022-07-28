@@ -1,10 +1,7 @@
 import PropTypes from "prop-types";
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
+import { Box, Step, Stepper, StepLabel } from "@mui/material";
 
-const FlowStepper = ({ steps, activeStep }) => {
+const FlowStepperHorizontal = ({ steps, activeStep }) => {
   return (
     <Box sx={{ width: "100%", my: "4rem" }}>
       <Stepper activeStep={activeStep} alternativeLabel>
@@ -18,13 +15,13 @@ const FlowStepper = ({ steps, activeStep }) => {
   );
 };
 
-FlowStepper.defaultProps = {
+FlowStepperHorizontal.defaultProps = {
   activeStep: 0,
 };
 
-FlowStepper.propTypes = {
+FlowStepperHorizontal.propTypes = {
   steps: PropTypes.array.isRequired,
   activeStep: PropTypes.number,
 };
 
-export default FlowStepper;
+export default FlowStepperHorizontal;

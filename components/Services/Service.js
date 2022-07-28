@@ -1,14 +1,26 @@
 import PropTypes from "prop-types";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { useState } from "react";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Button,
+  Typography,
+} from "@mui/material";
 
-const Service = ({ id, name, description, imagePath, clickHandler }) => {
+const Service = ({ service, onServiceSelect, onFinalServiceSelect }) => {
+  const { name, description, imagePath, durationInMinutes } = service;
+  const [isSelected, setIsSelected] = useState(false);
+
+  const serviceSelectionHandler = () => {
+    setIsSelected(!isSelected);
+    onServiceSelect(service);
+  };
+
   return (
     <Card
+      raised={isSelected}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -26,7 +38,7 @@ const Service = ({ id, name, description, imagePath, clickHandler }) => {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            {name}
+            {`${name} (${durationInMinutes}')`}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {description}
@@ -34,26 +46,34 @@ const Service = ({ id, name, description, imagePath, clickHandler }) => {
         </CardContent>
       </div>
       <CardActions>
-        <Button size="small" onClick={() => clickHandler({ id, name })}>
-          Select
+        <Button size="small" onClick={serviceSelectionHandler}>
+          {!isSelected ? "Select" : "Remove"}
         </Button>
-        <Button size="small">Learn More</Button>
+        {!isSelected && (
+          <Button size="small" onClick={() => onFinalServiceSelect(service)}>
+            Select and proceed
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
 };
 
 Service.defaultProps = {
-  imagePath: null,
-  clickHandler: () => {},
+  onServiceSelect: () => {},
+  onFinalServiceSelect: () => {},
 };
 
 Service.propTypes = {
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  imagePath: PropTypes.string,
-  clickHandler: PropTypes.func,
+  service: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    imagePath: PropTypes.string,
+    durationInMinutes: PropTypes.number.isRequired,
+  }).isRequired,
+  onServiceSelect: PropTypes.func,
+  onFinalServiceSelect: PropTypes.func,
 };
 
 export default Service;
