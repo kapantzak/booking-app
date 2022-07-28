@@ -1,26 +1,28 @@
 import PropTypes from "prop-types";
 import { Box, Button } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { getSlots } from "@/lib/timeHelpers";
 
 const TimePicker = ({ slotDurationInMinutes, onTimeSelect }) => {
+  const { breakpoints } = useTheme();
   const slots = getSlots(slotDurationInMinutes);
 
   return (
     <Box
-      sx={(theme) => ({
+      sx={{
         display: "flex",
         flexDirection: "column",
         margin: "auto",
-        [theme.breakpoints.down("sm")]: {
+        [breakpoints.down("sm")]: {
           width: "100%",
         },
-        [theme.breakpoints.up("md")]: {
+        [breakpoints.up("md")]: {
           width: "70%",
         },
-        [theme.breakpoints.up("lg")]: {
+        [breakpoints.up("lg")]: {
           width: "40%",
         },
-      })}
+      }}
     >
       {slots.map(([hours, minutes]) => {
         const time = `${hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
