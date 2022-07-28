@@ -1,11 +1,14 @@
 import PropTypes from "prop-types";
 import { Box, Step, Stepper, StepLabel } from "@mui/material";
+import { getStepsArray } from "./helpers";
 
 const FlowStepperHorizontal = ({ steps, activeStep }) => {
+  const stepsArray = getStepsArray(steps);
+
   return (
     <Box sx={{ width: "100%", my: "4rem" }}>
       <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map(({ label }) => (
+        {stepsArray.map(({ label }) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
           </Step>
@@ -20,7 +23,7 @@ FlowStepperHorizontal.defaultProps = {
 };
 
 FlowStepperHorizontal.propTypes = {
-  steps: PropTypes.array.isRequired,
+  steps: PropTypes.object.isRequired,
   activeStep: PropTypes.number,
 };
 

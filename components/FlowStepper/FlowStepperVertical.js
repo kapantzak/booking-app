@@ -9,21 +9,15 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import { getStepsArray } from "./helpers";
 
 const FlowStepperVertical = ({ steps, activeStep }) => {
+  const stepsArray = getStepsArray(steps);
+
   return (
-    // <Box sx={{ width: "100%", my: "4rem" }}>
-    //   <Stepper activeStep={activeStep} alternativeLabel>
-    //     {steps.map(({ label }) => (
-    //       <Step key={label}>
-    //         <StepLabel>{label}</StepLabel>
-    //       </Step>
-    //     ))}
-    //   </Stepper>
-    // </Box>
     <Box sx={{ maxWidth: 400 }}>
       <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map(({ label, description }) => (
+        {stepsArray.map(({ label, description }) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
             <StepContent>
@@ -32,7 +26,7 @@ const FlowStepperVertical = ({ steps, activeStep }) => {
           </Step>
         ))}
       </Stepper>
-      {activeStep === steps.length && (
+      {activeStep === stepsArray.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
           <Typography>All steps completed - you&apos;re finished</Typography>
           <Button onClick={() => {}} sx={{ mt: 1, mr: 1 }}>
@@ -49,7 +43,7 @@ FlowStepperVertical.defaultProps = {
 };
 
 FlowStepperVertical.propTypes = {
-  steps: PropTypes.array.isRequired,
+  steps: PropTypes.object.isRequired,
   activeStep: PropTypes.number,
 };
 

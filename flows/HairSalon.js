@@ -16,21 +16,24 @@ const DynamicTimeZone = dynamic(() => import("@/components/TimeZone"));
  * Every flow has to define it's own steps list and pass it to the
  * parent Flow component through "onPopulateStepsList" function.
  */
-const STEPS = [
-  {
-    index: 1,
+const STEPS = {
+  1: {
     label: "Select service",
     description: "Select one or more services",
   },
-  { index: 2, label: "Select date", description: "Select the date" },
-  { index: 3, label: "Select time", description: "Select the time" },
-  {
-    index: 4,
+  2: {
+    label: "Select date",
+    description: "Select the date",
+  },
+  3: {
+    label: "Select time",
+    description: "Select the time",
+  },
+  4: {
     label: "Confirm",
     description: "Confirm your selection",
-    confirmation: true,
   },
-];
+};
 
 const initialState = {
   services: [],
@@ -177,7 +180,7 @@ HairSalon.defaultProps = {
 HairSalon.propTypes = {
   step: PropTypes.number,
   onStepChange: PropTypes.func,
-  onComplete: PropTypes.any.func,
+  onComplete: PropTypes.func,
   onPopulateStepsList: PropTypes.func,
 };
 

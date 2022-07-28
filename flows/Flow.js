@@ -8,7 +8,7 @@ import HairSalon from "@/flows/HairSalon";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Flow = () => {
-  const [steps, setSteps] = useState([]);
+  const [steps, setSteps] = useState({});
   const [step, setStep] = useState(1);
   const [state, setState] = useState({});
   const largeViewPort = useMediaQuery("(min-width:900px)");
