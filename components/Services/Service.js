@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
-import useViewPort from "@/hooks/useViewport";
+import useViewPort from "@/hooks/useViewPort";
 import {
   Card,
   CardActions,

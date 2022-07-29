@@ -9,7 +9,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import SelectedServices from "./SelectedServices";
 import SelectedDateTime from "./SelectedDateTime";
-import useViewPort from "@/hooks/useViewport";
+import useViewPort from "@/hooks/useViewPort";
 
 const DynamicServices = dynamic(() => import("@/components/Services"));
 const DynamicTimePicker = dynamic(() => import("@/components/TimePicker"));

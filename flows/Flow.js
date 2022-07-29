@@ -5,7 +5,7 @@ import {
   FlowStepperHorizontal,
 } from "@/components/FlowStepper";
 import HairSalon from "@/flows/HairSalon";
-import useViewPort from "@/hooks/useViewport";
+import useViewPort from "@/hooks/useViewPort";
 
 const Flow = () => {
   const [steps, setSteps] = useState({});
