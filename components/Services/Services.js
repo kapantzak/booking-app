@@ -37,6 +37,10 @@ const Services = ({ onFinalServiceSelect }) => {
     setSelectedServices([...selectedServices, service]);
   };
 
+  const serviceDeselectionHandler = (service) => {
+    setSelectedServices(selectedServices.filter(({ id }) => id !== service.id));
+  };
+
   const finalServiceSelectionHandler = (service) => {
     onFinalServiceSelect([service, ...selectedServices]);
   };
@@ -48,6 +52,7 @@ const Services = ({ onFinalServiceSelect }) => {
         justifyContent: "start",
         flexDirection: "row",
         flexWrap: "wrap",
+        paddingX: 2,
       }}
     >
       {services.map((service) => (
@@ -55,6 +60,7 @@ const Services = ({ onFinalServiceSelect }) => {
           key={JSON.stringify(service)}
           service={service}
           onServiceSelect={serviceSelectionHandler}
+          onServiceDeselect={serviceDeselectionHandler}
           onFinalServiceSelect={finalServiceSelectionHandler}
         />
       ))}

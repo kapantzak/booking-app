@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
+import { useTheme } from "@mui/material/styles";
 import {
   Card,
   CardActions,
@@ -9,24 +10,40 @@ import {
   Typography,
 } from "@mui/material";
 
-const Service = ({ service, onServiceSelect, onFinalServiceSelect }) => {
+const Service = ({
+  service,
+  onServiceSelect,
+  onServiceDeselect,
+  onFinalServiceSelect,
+}) => {
+  const { breakpoints } = useTheme();
   const { name, description, imagePath, durationInMinutes } = service;
   const [isSelected, setIsSelected] = useState(false);
 
   const serviceSelectionHandler = () => {
+    if (isSelected) {
+      onServiceDeselect(service);
+    } else {
+      onServiceSelect(service);
+    }
+
     setIsSelected(!isSelected);
-    onServiceSelect(service);
   };
 
   return (
     <Card
       raised={isSelected}
       sx={{
+        width: "100%",
+        marginY: 2,
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        maxWidth: 345,
-        m: 1,
+        [breakpoints.up("md")]: {
+          width: "46%",
+          marginX: "2%",
+          marginY: "2%",
+        },
       }}
     >
       <div>
@@ -61,6 +78,7 @@ const Service = ({ service, onServiceSelect, onFinalServiceSelect }) => {
 
 Service.defaultProps = {
   onServiceSelect: () => {},
+  onServiceDeselect: () => {},
   onFinalServiceSelect: () => {},
 };
 
@@ -73,6 +91,7 @@ Service.propTypes = {
     durationInMinutes: PropTypes.number.isRequired,
   }).isRequired,
   onServiceSelect: PropTypes.func,
+  onServiceDeselect: PropTypes.func,
   onFinalServiceSelect: PropTypes.func,
 };
 
