@@ -2,7 +2,7 @@ import { getSlots } from "@/lib/timeHelpers";
 
 describe("getSlots", () => {
   it("returns 48 slots for 30 minutes slot duration", () => {
-    const actual = getSlots(30);
+    const actual = getSlots({ slotDurationInMinutes: 30 });
     const expected = [
       [0, 0],
       [0, 30],
@@ -58,7 +58,7 @@ describe("getSlots", () => {
   });
 
   it("returns 24 slots for 60 minutes slot duration", () => {
-    const actual = getSlots(60);
+    const actual = getSlots({ slotDurationInMinutes: 60 });
     const expected = [
       [0, 0],
       [1, 0],
@@ -87,5 +87,56 @@ describe("getSlots", () => {
     ];
 
     expect(actual).toEqual(expected);
+  });
+
+  describe("with invalid from and to props", () => {
+    it("returns an empty array", () => {
+      const actual = getSlots({
+        slotDurationInMinutes: 30,
+        from: [15, 0],
+        to: [14, 0],
+      });
+
+      expect(actual).toEqual([]);
+    });
+  });
+
+  describe("with from set to [10,150]", () => {
+    it("is treated as [10,30]", () => {
+      const actual = getSlots({
+        slotDurationInMinutes: 60,
+        from: [10, 150],
+        to: [14, 0],
+      });
+
+      const expected = [
+        [10, 30],
+        [11, 30],
+        [12, 30],
+      ];
+
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe("with slot duration of 60 minutes and hours from 10:00 to 17:00", () => {
+    it("returns 7 slots", () => {
+      const actual = getSlots({
+        slotDurationInMinutes: 60,
+        from: [10, 0],
+        to: [17, 0],
+      });
+      const expected = [
+        [10, 0],
+        [11, 0],
+        [12, 0],
+        [13, 0],
+        [14, 0],
+        [15, 0],
+        [16, 0],
+      ];
+
+      expect(actual).toEqual(expected);
+    });
   });
 });

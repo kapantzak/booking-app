@@ -1,11 +1,24 @@
 import PropTypes from "prop-types";
 import { Box, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { getSlots } from "@/lib/timeHelpers";
+import { getSlots, getTimeElements } from "@/lib/timeHelpers";
 
 const TimePicker = ({ slotDurationInMinutes, onTimeSelect }) => {
   const { breakpoints } = useTheme();
-  const slots = getSlots(slotDurationInMinutes);
+
+  const dateNow = new Date();
+  const { hours: hoursFrom, minutes: minutesFrom } = getTimeElements(dateNow);
+
+  const dateUntil = new Date();
+  dateUntil.setHours(18);
+  dateUntil.setMinutes(0);
+  const { hours: hoursTo, minutes: minutesTo } = getTimeElements(dateUntil);
+
+  const slots = getSlots({
+    slotDurationInMinutes,
+    from: [hoursFrom, minutesFrom],
+    to: [hoursTo, minutesTo],
+  });
 
   return (
     <Box
