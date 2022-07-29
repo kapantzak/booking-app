@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import useViewPort from "@/hooks/useViewport";
 import {
   Card,
   CardActions,
@@ -18,6 +19,7 @@ const Service = ({
   onFinalServiceSelect,
 }) => {
   const { breakpoints } = useTheme();
+  const { largeViewPort } = useViewPort();
   const { name, description, imagePath, durationInMinutes } = service;
   const [isSelected, setIsSelected] = useState(initiallySelected);
 
@@ -55,7 +57,11 @@ const Service = ({
           image={imagePath}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography
+            gutterBottom
+            variant={largeViewPort ? "h5" : "h6"}
+            component="div"
+          >
             {`${name} (${durationInMinutes}')`}
           </Typography>
           <Typography variant="body2" color="text.secondary">

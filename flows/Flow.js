@@ -5,14 +5,14 @@ import {
   FlowStepperHorizontal,
 } from "@/components/FlowStepper";
 import HairSalon from "@/flows/HairSalon";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import useViewPort from "@/hooks/useViewport";
 
 const Flow = () => {
   const [steps, setSteps] = useState({});
   const [state, setState] = useState({ step: 1 });
   const { step } = state;
 
-  const largeViewPort = useMediaQuery("(min-width:900px)");
+  const { largeViewPort } = useViewPort();
 
   const handleStepsListPopulation = (stepsList) => {
     setSteps(stepsList);

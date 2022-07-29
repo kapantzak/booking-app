@@ -6,7 +6,7 @@ const FlowStepperHorizontal = ({ steps, activeStep }) => {
   const stepsArray = getStepsArray(steps);
 
   return (
-    <Box sx={{ width: "100%", my: "4rem" }}>
+    <Box sx={{ width: "100%", my: 3 }}>
       <Stepper activeStep={activeStep} alternativeLabel>
         {stepsArray.map(({ label }) => (
           <Step key={label}>

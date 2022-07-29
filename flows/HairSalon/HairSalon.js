@@ -9,10 +9,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import SelectedServices from "./SelectedServices";
 import SelectedDateTime from "./SelectedDateTime";
+import useViewPort from "@/hooks/useViewport";
 
 const DynamicServices = dynamic(() => import("@/components/Services"));
 const DynamicTimePicker = dynamic(() => import("@/components/TimePicker"));
-const DynamicTimeZone = dynamic(() => import("@/components/TimeZone"));
+// const DynamicTimeZone = dynamic(() => import("@/components/TimeZone"));
 
 /**
  * Every flow has to define it's own steps list and pass it to the
@@ -99,6 +100,8 @@ const HairSalon = ({
     return total;
   }, 0);
 
+  const { largeViewPort } = useViewPort();
+
   useEffect(() => {
     onPopulateStepsList(STEPS);
   }, []);
@@ -158,7 +161,7 @@ const HairSalon = ({
   };
 
   return (
-    <>
+    <Box>
       {step > 1 && (
         <Box
           sx={{
@@ -176,61 +179,79 @@ const HairSalon = ({
           </Button>
         </Box>
       )}
-      {step === 1 && (
-        <DynamicServices
-          initialServices={services}
-          onServiceSelectionChange={handleServiceSelectionChange}
-          onFinalServiceSelect={handleServiceSelection}
-        />
-      )}
-      {step === 2 && (
-        <>
-          <LocalizationProvider
-            dateAdapter={AdapterDateFns}
-            adapterLocale={elLocale}
-          >
-            <StaticDatePicker
-              displayStaticWrapperAs="desktop"
-              openTo="day"
-              disablePast={true}
-              value={state.date}
-              onChange={(newValue) => {
-                handleDateSelection(newValue);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
-          <DynamicTimeZone />
-        </>
-      )}
-      {step === 3 && (
-        <>
-          <DynamicTimeZone />
-          <DynamicTimePicker
-            slotDurationInMinutes={totalDurationInMinutes}
-            onTimeSelect={handleTimeSelection}
+      <Typography
+        variant={largeViewPort ? "h4" : "h5"}
+        textAlign={largeViewPort ? "left" : "center"}
+      >
+        {STEPS[step].label}
+      </Typography>
+      <Typography
+        variant="subtitle1"
+        textAlign={largeViewPort ? "left" : "center"}
+      >
+        {STEPS[step].description}
+      </Typography>
+      <Box
+        sx={{
+          marginTop: 2,
+        }}
+      >
+        {step === 1 && (
+          <DynamicServices
+            initialServices={services}
+            onServiceSelectionChange={handleServiceSelectionChange}
+            onFinalServiceSelect={handleServiceSelection}
           />
-        </>
-      )}
-      {step === 4 && (
-        <>
-          <Box sx={{ marginBottom: 4 }}>
-            <Typography gutterBottom variant="h5" component="div">
-              Confirm your selection
-            </Typography>
-            <SelectedServices services={services} />
-            <SelectedDateTime date={date} time={time} />
-          </Box>
-          <Button
-            variant="contained"
-            startIcon={<Check />}
-            onClick={handleConfirmButtonClick}
-          >
-            Confirm
-          </Button>
-        </>
-      )}
-    </>
+        )}
+        {step === 2 && (
+          <>
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              adapterLocale={elLocale}
+            >
+              <StaticDatePicker
+                displayStaticWrapperAs="desktop"
+                openTo="day"
+                disablePast={true}
+                value={state.date}
+                onChange={(newValue) => {
+                  handleDateSelection(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+            {/* <DynamicTimeZone /> */}
+          </>
+        )}
+        {step === 3 && (
+          <>
+            {/* <DynamicTimeZone /> */}
+            <DynamicTimePicker
+              slotDurationInMinutes={totalDurationInMinutes}
+              onTimeSelect={handleTimeSelection}
+            />
+          </>
+        )}
+        {step === 4 && (
+          <>
+            <Box sx={{ marginBottom: 4 }}>
+              <Typography gutterBottom variant="h5" component="div">
+                Confirm your selection
+              </Typography>
+              <SelectedServices services={services} />
+              <SelectedDateTime date={date} time={time} />
+            </Box>
+            <Button
+              variant="contained"
+              startIcon={<Check />}
+              onClick={handleConfirmButtonClick}
+            >
+              Confirm
+            </Button>
+          </>
+        )}
+      </Box>
+    </Box>
   );
 };
 

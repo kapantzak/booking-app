@@ -63,7 +63,6 @@ const Services = ({
         justifyContent: "start",
         flexDirection: "row",
         flexWrap: "wrap",
-        paddingX: 2,
       }}
     >
       {services.map((service) => {
