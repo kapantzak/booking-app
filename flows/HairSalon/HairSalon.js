@@ -17,17 +17,60 @@ const DynamicTimeZone = dynamic(() => import("@/components/TimeZone"));
 /**
  * Every flow has to define it's own steps list and pass it to the
  * parent Flow component through "onPopulateStepsList" function.
+ *
+ * Step object shape:
+ * {
+ *   stateKey {String}: The state property that this step is bound to
+ *   stateValueFormatter: (Function): A formatter function that accepts
+ *     the respective state value and returns a readable format to render
+ *     in the stepper
+ *   label {String}
+ *   description: {String}
+ * }
  */
 const STEPS = {
   1: {
+    stateKey: "services",
+    stateValueFormatter: (services) => {
+      if (services && services.length > 0) {
+        const firstService = services[0].name;
+        const trailingText =
+          services.length > 1 ? ` + ${services.length - 1} more` : "";
+
+        return `${firstService}${trailingText}`;
+      }
+
+      return "Select service";
+    },
     label: "Select service",
     description: "Select one or more services",
   },
   2: {
+    stateKey: "date",
+    stateValueFormatter: (date) => {
+      if (!date) return "Select date";
+
+      return Intl.DateTimeFormat("el").format(date);
+    },
     label: "Select date",
     description: "Select the date",
   },
   3: {
+    stateKey: "time",
+    stateValueFormatter: (time) => {
+      if (time && time.length === 2) {
+        const d = new Date();
+        d.setHours(time[0]);
+        d.setMinutes(time[1]);
+
+        return Intl.DateTimeFormat("el", {
+          hour: "numeric",
+          minute: "numeric",
+        }).format(d);
+      }
+
+      return "Select time";
+    },
     label: "Select time",
     description: "Select the time",
   },
@@ -43,7 +86,12 @@ const initialState = {
   time: null,
 };
 
-const HairSalon = ({ step, onStepChange, onComplete, onPopulateStepsList }) => {
+const HairSalon = ({
+  step,
+  onStateChange,
+  onComplete,
+  onPopulateStepsList,
+}) => {
   const [state, setState] = useState(initialState);
   const { services, date, time } = state;
   const totalDurationInMinutes = services.reduce((total, service) => {
@@ -60,46 +108,49 @@ const HairSalon = ({ step, onStepChange, onComplete, onPopulateStepsList }) => {
 
     switch (step) {
       case 1:
-        newState = { ...state, date: null, time: null };
+        newState = { ...state, step, date: null, time: null };
         break;
       case 2:
-        newState = { ...state, time: null };
+        newState = { ...state, step, time: null };
         break;
     }
 
     setState(newState);
-    onStepChange({ step, state: newState });
+    onStateChange(newState);
   }, [step]);
 
-  const handleServiceSelection = (services) => {
+  const handleServiceSelectionChange = (services) => {
     const newState = { ...state, services };
     setState(newState);
-    onStepChange({
-      step: step + 1,
-      state: newState,
-    });
+    onStateChange(newState);
+  };
+
+  const handleServiceSelection = (services) => {
+    const newStep = state.step + 1;
+    const newState = { ...state, step: newStep, services };
+    setState(newState);
+    onStateChange(newState);
   };
 
   const handleDateSelection = (date) => {
-    const newState = { ...state, date };
+    const newStep = state.step + 1;
+    const newState = { ...state, step: newStep, date };
     setState(newState);
-    onStepChange({
-      step: step + 1,
-      state: newState,
-    });
+    onStateChange(newState);
   };
 
   const handleTimeSelection = (time) => {
-    const newState = { ...state, time };
+    const newStep = state.step + 1;
+    const newState = { ...state, step: newStep, time };
     setState(newState);
-    onStepChange({
-      step: step + 1,
-      state: newState,
-    });
+    onStateChange(newState);
   };
 
   const handleBackButtonClick = () => {
-    onStepChange({ step: step - 1, state });
+    const newStep = state.step - 1;
+    const newState = { ...state, step: newStep };
+    setState(newState);
+    onStateChange(newState);
   };
 
   const handleConfirmButtonClick = () => {
@@ -126,7 +177,11 @@ const HairSalon = ({ step, onStepChange, onComplete, onPopulateStepsList }) => {
         </Box>
       )}
       {step === 1 && (
-        <DynamicServices onFinalServiceSelect={handleServiceSelection} />
+        <DynamicServices
+          initialServices={services}
+          onServiceSelectionChange={handleServiceSelectionChange}
+          onFinalServiceSelect={handleServiceSelection}
+        />
       )}
       {step === 2 && (
         <>
@@ -181,14 +236,14 @@ const HairSalon = ({ step, onStepChange, onComplete, onPopulateStepsList }) => {
 
 HairSalon.defaultProps = {
   step: 1,
-  onStepChange: () => {},
+  onStateChange: () => {},
   onComplete: () => {},
   onPopulateStepsList: () => {},
 };
 
 HairSalon.propTypes = {
   step: PropTypes.number,
-  onStepChange: PropTypes.func,
+  onStateChange: PropTypes.func,
   onComplete: PropTypes.func,
   onPopulateStepsList: PropTypes.func,
 };

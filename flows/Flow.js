@@ -9,17 +9,17 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Flow = () => {
   const [steps, setSteps] = useState({});
-  const [step, setStep] = useState(1);
-  const [state, setState] = useState({});
+  const [state, setState] = useState({ step: 1 });
+  const { step } = state;
+
   const largeViewPort = useMediaQuery("(min-width:900px)");
 
   const handleStepsListPopulation = (stepsList) => {
     setSteps(stepsList);
   };
 
-  const handleStepChange = ({ step, state }) => {
-    setStep(step);
-    setState(state);
+  const handleStateChange = (newState) => {
+    setState(newState);
   };
 
   const handleComplete = (state) => {
@@ -31,13 +31,13 @@ const Flow = () => {
     <Grid container spacing={2}>
       <Grid item xs={12} md={3}>
         {(largeViewPort && (
-          <FlowStepperVertical steps={steps} activeStep={step - 1} />
+          <FlowStepperVertical steps={steps} state={state} />
         )) || <FlowStepperHorizontal steps={steps} activeStep={step - 1} />}
       </Grid>
       <Grid item xs={12} md={9}>
         <HairSalon
           step={step}
-          onStepChange={handleStepChange}
+          onStateChange={handleStateChange}
           onComplete={handleComplete}
           onPopulateStepsList={handleStepsListPopulation}
         />

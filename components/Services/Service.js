@@ -12,13 +12,14 @@ import {
 
 const Service = ({
   service,
+  initiallySelected,
   onServiceSelect,
   onServiceDeselect,
   onFinalServiceSelect,
 }) => {
   const { breakpoints } = useTheme();
   const { name, description, imagePath, durationInMinutes } = service;
-  const [isSelected, setIsSelected] = useState(false);
+  const [isSelected, setIsSelected] = useState(initiallySelected);
 
   const serviceSelectionHandler = () => {
     if (isSelected) {
@@ -77,6 +78,7 @@ const Service = ({
 };
 
 Service.defaultProps = {
+  initiallySelected: false,
   onServiceSelect: () => {},
   onServiceDeselect: () => {},
   onFinalServiceSelect: () => {},
@@ -90,6 +92,7 @@ Service.propTypes = {
     imagePath: PropTypes.string,
     durationInMinutes: PropTypes.number.isRequired,
   }).isRequired,
+  initiallySelected: PropTypes.bool,
   onServiceSelect: PropTypes.func,
   onServiceDeselect: PropTypes.func,
   onFinalServiceSelect: PropTypes.func,

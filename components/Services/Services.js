@@ -30,15 +30,26 @@ const services = [
   },
 ];
 
-const Services = ({ onFinalServiceSelect }) => {
-  const [selectedServices, setSelectedServices] = useState([]);
+const Services = ({
+  initialServices,
+  onServiceSelectionChange,
+  onFinalServiceSelect,
+}) => {
+  const [selectedServices, setSelectedServices] = useState(initialServices);
+  const selectedServicesIds = selectedServices.map(({ id }) => id);
 
   const serviceSelectionHandler = (service) => {
-    setSelectedServices([...selectedServices, service]);
+    const newSelectedServices = [...selectedServices, service];
+    setSelectedServices(newSelectedServices);
+    onServiceSelectionChange(newSelectedServices);
   };
 
   const serviceDeselectionHandler = (service) => {
-    setSelectedServices(selectedServices.filter(({ id }) => id !== service.id));
+    const newSelectedServices = selectedServices.filter(
+      ({ id }) => id !== service.id
+    );
+    setSelectedServices(newSelectedServices);
+    onServiceSelectionChange(newSelectedServices);
   };
 
   const finalServiceSelectionHandler = (service) => {
@@ -55,24 +66,33 @@ const Services = ({ onFinalServiceSelect }) => {
         paddingX: 2,
       }}
     >
-      {services.map((service) => (
-        <Service
-          key={JSON.stringify(service)}
-          service={service}
-          onServiceSelect={serviceSelectionHandler}
-          onServiceDeselect={serviceDeselectionHandler}
-          onFinalServiceSelect={finalServiceSelectionHandler}
-        />
-      ))}
+      {services.map((service) => {
+        const serviceSelected = selectedServicesIds.includes(service.id);
+
+        return (
+          <Service
+            key={JSON.stringify(service)}
+            service={service}
+            initiallySelected={serviceSelected}
+            onServiceSelect={serviceSelectionHandler}
+            onServiceDeselect={serviceDeselectionHandler}
+            onFinalServiceSelect={finalServiceSelectionHandler}
+          />
+        );
+      })}
     </Box>
   );
 };
 
 Services.defaultProps = {
+  initialServices: [],
+  onServiceSelectionChange: () => {},
   onFinalServiceSelect: () => {},
 };
 
 Services.propTypes = {
+  initialServices: PropTypes.array,
+  onServiceSelectionChange: PropTypes.func,
   onServiceSelect: PropTypes.func,
 };
 

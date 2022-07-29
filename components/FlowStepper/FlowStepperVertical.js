@@ -11,20 +11,27 @@ import {
 } from "@mui/material";
 import { getStepsArray } from "./helpers";
 
-const FlowStepperVertical = ({ steps, activeStep }) => {
+const FlowStepperVertical = ({ steps, state }) => {
   const stepsArray = getStepsArray(steps);
+  const activeStep = (state.step || 1) - 1;
 
   return (
     <Box sx={{ maxWidth: 400 }}>
       <Stepper activeStep={activeStep} orientation="vertical">
-        {stepsArray.map(({ label, description }) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-            <StepContent>
-              <Typography>{description}</Typography>
-            </StepContent>
-          </Step>
-        ))}
+        {stepsArray.map(
+          ({ stateKey, stateValueFormatter, label, description }) => (
+            <Step key={label}>
+              <StepLabel>
+                {(stateValueFormatter &&
+                  stateValueFormatter(state[stateKey])) ||
+                  label}
+              </StepLabel>
+              <StepContent>
+                <Typography>{description}</Typography>
+              </StepContent>
+            </Step>
+          )
+        )}
       </Stepper>
       {activeStep === stepsArray.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
@@ -39,12 +46,12 @@ const FlowStepperVertical = ({ steps, activeStep }) => {
 };
 
 FlowStepperVertical.defaultProps = {
-  activeStep: 0,
+  state: {},
 };
 
 FlowStepperVertical.propTypes = {
   steps: PropTypes.object.isRequired,
-  activeStep: PropTypes.number,
+  state: PropTypes.object,
 };
 
 export default FlowStepperVertical;
