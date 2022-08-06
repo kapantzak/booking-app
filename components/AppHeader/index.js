@@ -1,42 +1,57 @@
 import { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
+import HomeIcon from "@mui/icons-material/Home";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Avatar,
+  Button,
+  Tooltip,
+  MenuItem,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const AppHeader = () => {
-  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const router = useRouter();
 
   const pages = [
     {
+      name: "Home",
+      action: () => router.push("/"),
+      Icon: HomeIcon,
+    },
+    {
       name: "Flow",
       action: () => router.push("/flow"),
+      Icon: HomeIcon,
     },
   ];
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
+  const handleOpenNavMenu = () => {
+    setDrawerOpen(true);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+    setDrawerOpen(false);
   };
 
   const handleCloseUserMenu = () => {
@@ -78,36 +93,29 @@ const AppHeader = () => {
             >
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
+            <Drawer
+              anchor="left"
+              open={drawerOpen}
+              onClose={() => setDrawerOpen(false)}
             >
-              {pages.map(({ name, action }) => (
-                <MenuItem
-                  key={name}
-                  onClick={() => {
-                    action();
-                    handleCloseNavMenu();
-                  }}
-                >
-                  <Typography textAlign="center">{name}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+              <List>
+                {pages.map(({ name, action, Icon }) => (
+                  <ListItem key={name}>
+                    <ListItemButton
+                      onClick={() => {
+                        action();
+                        handleCloseNavMenu();
+                      }}
+                    >
+                      <ListItemIcon>
+                        <Icon />
+                      </ListItemIcon>
+                      <ListItemText primary={name} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Drawer>
           </Box>
           <Link href="/">
             <Typography
@@ -130,18 +138,20 @@ const AppHeader = () => {
             </Typography>
           </Link>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map(({ name, action }) => (
-              <Button
-                key={name}
-                onClick={() => {
-                  action();
-                  handleCloseNavMenu();
-                }}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {name}
-              </Button>
-            ))}
+            {pages
+              .filter(({ name }) => name !== "Home")
+              .map(({ name, action }) => (
+                <Button
+                  key={name}
+                  onClick={() => {
+                    action();
+                    handleCloseNavMenu();
+                  }}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {name}
+                </Button>
+              ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
